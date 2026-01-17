@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\work\\ClinicSaaS\\ClinicSaaS.Domain\\ClinicSaaS.Domain.csproj": {}
+    "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.Domain\\ClinicSaaS.Domain.csproj": {}
   },
   "projects": {
-    "D:\\work\\ClinicSaaS\\ClinicSaaS.Domain\\ClinicSaaS.Domain.csproj": {
+    "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.Domain\\ClinicSaaS.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\work\\ClinicSaaS\\ClinicSaaS.Domain\\ClinicSaaS.Domain.csproj",
+        "projectUniqueName": "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.Domain\\ClinicSaaS.Domain.csproj",
         "projectName": "ClinicSaaS.Domain",
-        "projectPath": "D:\\work\\ClinicSaaS\\ClinicSaaS.Domain\\ClinicSaaS.Domain.csproj",
+        "projectPath": "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.Domain\\ClinicSaaS.Domain.csproj",
         "packagesPath": "C:\\Users\\Yathrip\\.nuget\\packages\\",
-        "outputPath": "D:\\work\\ClinicSaaS\\ClinicSaaS.Domain\\obj\\",
+        "outputPath": "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -7,24 +7,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ClinicSaaS.Infrastructure.Persistence;
 
-/// <summary>
-/// EF Core DbContext for ClinicSaaS with soft delete and audit support.
-/// </summary>
 public sealed class ClinicDbContext : DbContext
 {
-    private readonly Guid? _currentClinicId;
-    private readonly Guid? _currentUserId;
+    private Guid? _currentClinicId;
+    private Guid? _currentUserId;
 
+    // Constructor الوحيد المسموح
     public ClinicDbContext(DbContextOptions<ClinicDbContext> options)
         : base(options)
     {
     }
 
-    public ClinicDbContext(DbContextOptions<ClinicDbContext> options, Guid? currentClinicId, Guid? currentUserId)
-        : base(options)
+    // Method علشان نحقن القيم بعد إنشاء الكونتكست
+    public void SetCurrentContext(Guid? clinicId, Guid? userId)
     {
-        _currentClinicId = currentClinicId;
-        _currentUserId = currentUserId;
+        _currentClinicId = clinicId;
+        _currentUserId = userId;
     }
 
     public DbSet<Clinic> Clinics => Set<Clinic>();
@@ -36,26 +34,22 @@ public sealed class ClinicDbContext : DbContext
     public DbSet<InsuranceCompany> InsuranceCompanies => Set<InsuranceCompany>();
     public DbSet<Payment> Payments => Set<Payment>();
 
-    /// <inheritdoc/>
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         ApplyAuditFields();
         return await base.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
     }
 
-    /// <inheritdoc/>
     public override int SaveChanges()
     {
         ApplyAuditFields();
         return base.SaveChanges();
     }
 
-    /// <inheritdoc/>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        // Global query filters for soft delete
         var baseEntityType = typeof(BaseEntity);
         foreach (var entityType in modelBuilder.Model.GetEntityTypes()
                      .Where(e => e.ClrType.IsAssignableTo(baseEntityType)))
@@ -63,13 +57,14 @@ public sealed class ClinicDbContext : DbContext
             var parameter = System.Linq.Expressions.Expression.Parameter(entityType.ClrType);
             var deletedProperty = System.Linq.Expressions.Expression.Property(parameter, nameof(BaseEntity.IsDeleted));
             var deletedFilter = System.Linq.Expressions.Expression.Lambda(
-                System.Linq.Expressions.Expression.Equal(deletedProperty, System.Linq.Expressions.Expression.Constant(false)),
+                System.Linq.Expressions.Expression.Equal(
+                    deletedProperty,
+                    System.Linq.Expressions.Expression.Constant(false)),
                 parameter);
 
             modelBuilder.Entity(entityType.ClrType).HasQueryFilter(deletedFilter);
         }
 
-        // Entity configurations
         modelBuilder.Entity<Clinic>(b =>
         {
             b.HasKey(x => x.Id);
@@ -93,7 +88,7 @@ public sealed class ClinicDbContext : DbContext
             b.Property(x => x.FullName).IsRequired().HasMaxLength(200);
             b.Property(x => x.Specialty).HasMaxLength(200);
             b.Property(x => x.Code).HasMaxLength(50);
-            b.HasIndex(x => new { x.ClinicId, x.Code }).IsUnique(false);
+            b.HasIndex(x => new { x.ClinicId, x.Code });
             b.HasIndex(x => x.ClinicId);
         });
 

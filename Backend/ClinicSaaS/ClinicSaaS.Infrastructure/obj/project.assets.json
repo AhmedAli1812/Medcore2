@@ -4674,11 +4674,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\work\\ClinicSaaS\\ClinicSaaS.Infrastructure\\ClinicSaaS.Infrastructure.csproj",
+      "projectUniqueName": "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.Infrastructure\\ClinicSaaS.Infrastructure.csproj",
       "projectName": "ClinicSaaS.Infrastructure",
-      "projectPath": "D:\\work\\ClinicSaaS\\ClinicSaaS.Infrastructure\\ClinicSaaS.Infrastructure.csproj",
+      "projectPath": "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.Infrastructure\\ClinicSaaS.Infrastructure.csproj",
       "packagesPath": "C:\\Users\\Yathrip\\.nuget\\packages\\",
-      "outputPath": "D:\\work\\ClinicSaaS\\ClinicSaaS.Infrastructure\\obj\\",
+      "outputPath": "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -4699,11 +4699,11 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "D:\\work\\ClinicSaaS\\ClinicSaaS.Application\\ClinicSaaS.Application.csproj": {
-              "projectPath": "D:\\work\\ClinicSaaS\\ClinicSaaS.Application\\ClinicSaaS.Application.csproj"
+            "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.Application\\ClinicSaaS.Application.csproj": {
+              "projectPath": "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.Application\\ClinicSaaS.Application.csproj"
             },
-            "D:\\work\\ClinicSaaS\\ClinicSaaS.Domain\\ClinicSaaS.Domain.csproj": {
-              "projectPath": "D:\\work\\ClinicSaaS\\ClinicSaaS.Domain\\ClinicSaaS.Domain.csproj"
+            "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.Domain\\ClinicSaaS.Domain.csproj": {
+              "projectPath": "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.Domain\\ClinicSaaS.Domain.csproj"
             }
           }
         }

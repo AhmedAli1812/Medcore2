@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace ClinicSaaS.API.Controllers;
 
 /// <summary>
@@ -29,6 +28,7 @@ public sealed class AccountantController : ControllerBase
     /// <summary>
     /// Get daily income for a specific date.
     /// </summary>
+    [HttpGet("daily-income")]
     [ProducesResponseType(typeof(Result<object>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -43,7 +43,8 @@ public sealed class AccountantController : ControllerBase
 
         var clinicId = HttpContext.GetClinicId() ?? Guid.Empty;
 
-        var result = await _accountantService.GetDailyIncomeAsync(clinicId, date, cancellationToken)
+        var result = await _accountantService
+            .GetDailyIncomeAsync(clinicId, date, cancellationToken)
             .ConfigureAwait(false);
 
         return result.Success ? Ok(result) : BadRequest(result);
@@ -52,6 +53,7 @@ public sealed class AccountantController : ControllerBase
     /// <summary>
     /// Get income summary for a date range.
     /// </summary>
+    [HttpGet("range-income")]
     [ProducesResponseType(typeof(Result<object>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -67,7 +69,8 @@ public sealed class AccountantController : ControllerBase
 
         var clinicId = HttpContext.GetClinicId() ?? Guid.Empty;
 
-        var result = await _accountantService.GetDateRangeIncomeAsync(clinicId, startDate, endDate, cancellationToken)
+        var result = await _accountantService
+            .GetDateRangeIncomeAsync(clinicId, startDate, endDate, cancellationToken)
             .ConfigureAwait(false);
 
         return result.Success ? Ok(result) : BadRequest(result);
@@ -76,6 +79,7 @@ public sealed class AccountantController : ControllerBase
     /// <summary>
     /// Get doctor revenues for a date range.
     /// </summary>
+    [HttpGet("doctor-revenues")]
     [ProducesResponseType(typeof(Result<object>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -91,7 +95,8 @@ public sealed class AccountantController : ControllerBase
 
         var clinicId = HttpContext.GetClinicId() ?? Guid.Empty;
 
-        var result = await _accountantService.GetDoctorRevenuesAsync(clinicId, startDate, endDate, cancellationToken)
+        var result = await _accountantService
+            .GetDoctorRevenuesAsync(clinicId, startDate, endDate, cancellationToken)
             .ConfigureAwait(false);
 
         return result.Success ? Ok(result) : BadRequest(result);

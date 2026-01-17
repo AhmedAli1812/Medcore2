@@ -7,9 +7,6 @@ using ClinicSaaS.Shared.Security;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi;
-
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,7 +39,8 @@ builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
+})
+.AddJwtBearer(options =>
 {
     options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
     options.SaveToken = true;
@@ -77,64 +75,19 @@ builder.Services.AddAuthorization(options =>
         policy.RequireRole("ContractManager", "Admin"));
 });
 
-// Swagger with JWT support
+// Swagger (simple – بدون Microsoft.OpenApi)
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "ClinicSaaS API",
-        Version = "v1",
-        Description = "Multi-tenant Clinic Management System API",
-        Contact = new OpenApiContact
-        {
-            Name = "Support",
-            Email = "support@clinicsaas.com"
-        }
-    });
-
-    // Enable sending JWT bearer token from Swagger UI
-    var jwtSecurityScheme = new OpenApiSecurityScheme
-    {
-        BearerFormat = "JWT",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.Http,
-        Scheme = "bearer",
-        Description = "Enter JWT token",
-        Reference = new OpenApiReference
-        {
-            Id = JwtBearerDefaults.AuthenticationScheme,
-            Type = ReferenceType.SecurityScheme
-        }
-    };
-
-    c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        { jwtSecurityScheme, Array.Empty<string>() }
-    });
-
-    // Add XML documentation if available
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, "ClinicSaaS.API.xml");
-    if (File.Exists(xmlPath))
-    {
-        c.IncludeXmlComments(xmlPath);
-    }
-});
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
 // Middleware pipeline
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "ClinicSaaS API v1");
-        c.RoutePrefix = string.Empty;
-    });
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "ClinicSaaS API v1");
+    c.RoutePrefix = string.Empty; // Swagger يفتح على الصفحة الرئيسية
+});
 
 // Global exception handling
 app.UseGlobalExceptionHandler();
@@ -154,7 +107,6 @@ app.MapControllers();
 app.MapGet("/health", () =>
     Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }))
     .WithName("Health")
-    .WithOpenApi()
     .AllowAnonymous();
 
 // Seed database on startup

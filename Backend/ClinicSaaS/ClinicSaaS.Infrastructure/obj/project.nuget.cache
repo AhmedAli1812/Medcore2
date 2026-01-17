@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "IrgguMJWsq4=",
+  "dgSpecHash": "xNtWT4eNtO0=",
   "success": true,
-  "projectFilePath": "D:\\work\\ClinicSaaS\\ClinicSaaS.Infrastructure\\ClinicSaaS.Infrastructure.csproj",
+  "projectFilePath": "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.Infrastructure\\ClinicSaaS.Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Yathrip\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\Yathrip\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
