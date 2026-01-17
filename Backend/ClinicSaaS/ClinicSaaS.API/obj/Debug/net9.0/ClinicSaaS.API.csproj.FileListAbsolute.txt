@@ -1,0 +1,8 @@
+D:\work\ClinicSaaS\ClinicSaaS.API\obj\Debug\net9.0\ClinicSaaS.API.csproj.AssemblyReference.cache
+D:\work\ClinicSaaS\ClinicSaaS.API\obj\Debug\net9.0\rpswa.dswa.cache.json
+D:\work\ClinicSaaS\ClinicSaaS.API\obj\Debug\net9.0\ClinicSaaS.API.GeneratedMSBuildEditorConfig.editorconfig
+D:\work\ClinicSaaS\ClinicSaaS.API\obj\Debug\net9.0\ClinicSaaS.API.AssemblyInfoInputs.cache
+D:\work\ClinicSaaS\ClinicSaaS.API\obj\Debug\net9.0\ClinicSaaS.API.AssemblyInfo.cs
+D:\work\ClinicSaaS\ClinicSaaS.API\obj\Debug\net9.0\ClinicSaaS.API.csproj.CoreCompileInputs.cache
+D:\work\ClinicSaaS\ClinicSaaS.API\obj\Debug\net9.0\ClinicSaaS.API.MvcApplicationPartsAssemblyInfo.cs
+D:\work\ClinicSaaS\ClinicSaaS.API\obj\Debug\net9.0\ClinicSaaS.API.MvcApplicationPartsAssemblyInfo.cache

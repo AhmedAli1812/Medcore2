@@ -1,0 +1,12 @@
+D:\work\ClinicSaaS\ClinicSaaS.Shared\bin\Debug\net9.0\ClinicSaaS.Shared.deps.json
+D:\work\ClinicSaaS\ClinicSaaS.Shared\bin\Debug\net9.0\ClinicSaaS.Shared.dll
+D:\work\ClinicSaaS\ClinicSaaS.Shared\bin\Debug\net9.0\ClinicSaaS.Shared.pdb
+D:\work\ClinicSaaS\ClinicSaaS.Shared\obj\Debug\net9.0\ClinicSaaS.Shared.csproj.AssemblyReference.cache
+D:\work\ClinicSaaS\ClinicSaaS.Shared\obj\Debug\net9.0\ClinicSaaS.Shared.GeneratedMSBuildEditorConfig.editorconfig
+D:\work\ClinicSaaS\ClinicSaaS.Shared\obj\Debug\net9.0\ClinicSaaS.Shared.AssemblyInfoInputs.cache
+D:\work\ClinicSaaS\ClinicSaaS.Shared\obj\Debug\net9.0\ClinicSaaS.Shared.AssemblyInfo.cs
+D:\work\ClinicSaaS\ClinicSaaS.Shared\obj\Debug\net9.0\ClinicSaaS.Shared.csproj.CoreCompileInputs.cache
+D:\work\ClinicSaaS\ClinicSaaS.Shared\obj\Debug\net9.0\ClinicSaaS.Shared.dll
+D:\work\ClinicSaaS\ClinicSaaS.Shared\obj\Debug\net9.0\refint\ClinicSaaS.Shared.dll
+D:\work\ClinicSaaS\ClinicSaaS.Shared\obj\Debug\net9.0\ClinicSaaS.Shared.pdb
+D:\work\ClinicSaaS\ClinicSaaS.Shared\obj\Debug\net9.0\ref\ClinicSaaS.Shared.dll
