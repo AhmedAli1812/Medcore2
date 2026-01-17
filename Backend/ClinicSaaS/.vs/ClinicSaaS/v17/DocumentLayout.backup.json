@@ -1,0 +1,161 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{DC3FB4A8-C2B8-4201-B3C0-E5A3671D5460}|ClinicSaaS.API\\ClinicSaaS.API.csproj|d:\\work\\medcore2\\backend\\clinicsaas\\clinicsaas.api\\controllers\\accountantcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC3FB4A8-C2B8-4201-B3C0-E5A3671D5460}|ClinicSaaS.API\\ClinicSaaS.API.csproj|solutionrelative:clinicsaas.api\\controllers\\accountantcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC3FB4A8-C2B8-4201-B3C0-E5A3671D5460}|ClinicSaaS.API\\ClinicSaaS.API.csproj|d:\\work\\medcore2\\backend\\clinicsaas\\clinicsaas.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC3FB4A8-C2B8-4201-B3C0-E5A3671D5460}|ClinicSaaS.API\\ClinicSaaS.API.csproj|solutionrelative:clinicsaas.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC3FB4A8-C2B8-4201-B3C0-E5A3671D5460}|ClinicSaaS.API\\ClinicSaaS.API.csproj|d:\\work\\medcore2\\backend\\clinicsaas\\clinicsaas.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{DC3FB4A8-C2B8-4201-B3C0-E5A3671D5460}|ClinicSaaS.API\\ClinicSaaS.API.csproj|solutionrelative:clinicsaas.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC3FB4A8-C2B8-4201-B3C0-E5A3671D5460}|ClinicSaaS.API\\ClinicSaaS.API.csproj|d:\\work\\medcore2\\backend\\clinicsaas\\clinicsaas.api\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{DC3FB4A8-C2B8-4201-B3C0-E5A3671D5460}|ClinicSaaS.API\\ClinicSaaS.API.csproj|solutionrelative:clinicsaas.api\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC3FB4A8-C2B8-4201-B3C0-E5A3671D5460}|ClinicSaaS.API\\ClinicSaaS.API.csproj|d:\\work\\medcore2\\backend\\clinicsaas\\clinicsaas.api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{DC3FB4A8-C2B8-4201-B3C0-E5A3671D5460}|ClinicSaaS.API\\ClinicSaaS.API.csproj|solutionrelative:clinicsaas.api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC3FB4A8-C2B8-4201-B3C0-E5A3671D5460}|ClinicSaaS.API\\ClinicSaaS.API.csproj|d:\\work\\medcore2\\backend\\clinicsaas\\clinicsaas.api\\clinicsaas.api.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
+      "RelativeMoniker": "D:0:0:{DC3FB4A8-C2B8-4201-B3C0-E5A3671D5460}|ClinicSaaS.API\\ClinicSaaS.API.csproj|solutionrelative:clinicsaas.api\\clinicsaas.api.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EFF24A51-8F5A-4945-BE2A-B063E82292C3}|ClinicSaaS.Infrastructure\\ClinicSaaS.Infrastructure.csproj|d:\\work\\medcore2\\backend\\clinicsaas\\clinicsaas.infrastructure\\persistence\\clinicdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EFF24A51-8F5A-4945-BE2A-B063E82292C3}|ClinicSaaS.Infrastructure\\ClinicSaaS.Infrastructure.csproj|solutionrelative:clinicsaas.infrastructure\\persistence\\clinicdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AccountantController.cs",
+              "DocumentMoniker": "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.API\\Controllers\\AccountantController.cs",
+              "RelativeDocumentMoniker": "ClinicSaaS.API\\Controllers\\AccountantController.cs",
+              "ToolTip": "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.API\\Controllers\\AccountantController.cs",
+              "RelativeToolTip": "ClinicSaaS.API\\Controllers\\AccountantController.cs",
+              "ViewState": "AgIAAEEAAAAAAAAAAAAkwGgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-17T20:39:39.823Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.API\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "ClinicSaaS.API\\appsettings.Development.json",
+              "ToolTip": "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.API\\appsettings.Development.json",
+              "RelativeToolTip": "ClinicSaaS.API\\appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-01-17T20:35:26.785Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.API\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "ClinicSaaS.API\\Properties\\launchSettings.json",
+              "ToolTip": "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.API\\Properties\\launchSettings.json",
+              "RelativeToolTip": "ClinicSaaS.API\\Properties\\launchSettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-01-17T20:35:03.285Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.API\\appsettings.json",
+              "RelativeDocumentMoniker": "ClinicSaaS.API\\appsettings.json",
+              "ToolTip": "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.API\\appsettings.json",
+              "RelativeToolTip": "ClinicSaaS.API\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-01-17T20:31:31.581Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ClinicSaaS.API.http",
+              "DocumentMoniker": "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.API\\ClinicSaaS.API.http",
+              "RelativeDocumentMoniker": "ClinicSaaS.API\\ClinicSaaS.API.http",
+              "ToolTip": "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.API\\ClinicSaaS.API.http",
+              "RelativeToolTip": "ClinicSaaS.API\\ClinicSaaS.API.http",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
+              "WhenOpened": "2026-01-17T20:31:30.408Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ClinicDbContext.cs",
+              "DocumentMoniker": "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.Infrastructure\\Persistence\\ClinicDbContext.cs",
+              "RelativeDocumentMoniker": "ClinicSaaS.Infrastructure\\Persistence\\ClinicDbContext.cs",
+              "ToolTip": "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.Infrastructure\\Persistence\\ClinicDbContext.cs",
+              "RelativeToolTip": "ClinicSaaS.Infrastructure\\Persistence\\ClinicDbContext.cs",
+              "ViewState": "AgIAACwAAAAAZGZmZmYjwKIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-17T20:27:38.273Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.API\\Program.cs",
+              "RelativeDocumentMoniker": "ClinicSaaS.API\\Program.cs",
+              "ToolTip": "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.API\\Program.cs",
+              "RelativeToolTip": "ClinicSaaS.API\\Program.cs",
+              "ViewState": "AgIAAH8AAAAAAAAAAAAAAH8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-17T01:42:38.46Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

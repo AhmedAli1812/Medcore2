@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "l+uw2Y7a2mw=",
+  "success": true,
+  "projectFilePath": "D:\\work\\Medcore2\\Backend\\ClinicSaaS\\ClinicSaaS.Shared\\ClinicSaaS.Shared.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Yathrip\\.nuget\\packages\\microsoft.identitymodel.abstractions\\8.0.0\\microsoft.identitymodel.abstractions.8.0.0.nupkg.sha512",
+    "C:\\Users\\Yathrip\\.nuget\\packages\\microsoft.identitymodel.jsonwebtokens\\8.0.0\\microsoft.identitymodel.jsonwebtokens.8.0.0.nupkg.sha512",
+    "C:\\Users\\Yathrip\\.nuget\\packages\\microsoft.identitymodel.logging\\8.0.0\\microsoft.identitymodel.logging.8.0.0.nupkg.sha512",
+    "C:\\Users\\Yathrip\\.nuget\\packages\\microsoft.identitymodel.tokens\\8.0.0\\microsoft.identitymodel.tokens.8.0.0.nupkg.sha512",
+    "C:\\Users\\Yathrip\\.nuget\\packages\\system.identitymodel.tokens.jwt\\8.0.0\\system.identitymodel.tokens.jwt.8.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
