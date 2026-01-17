@@ -1,7 +1,0 @@
-{
-  "name": "MedCore CMS Enterprise",
-  "description": "Enterprise Clinic Management System with advanced financial closing, Arabic localization, and multi-role audit logging.",
-  "requestFramePermissions": [
-    "camera"
-  ]
-}
