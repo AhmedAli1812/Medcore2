@@ -1,5 +1,4 @@
-
-import { Doctor, InsuranceCompany, Patient, Visit, Clinic, SubscriptionPlan, Room, Schedule } from '../types';
+import { Doctor, InsuranceCompany, Patient, Visit, Clinic, SubscriptionPlan, Room, Schedule, Service } from '../types';
 
 export const INITIAL_ROOMS: Room[] = [
   { id: 'r1', name: 'عيادة القلب (1)', specialty: 'Cardiology', status: 'Active' },
@@ -58,3 +57,20 @@ export const INITIAL_PATIENTS: Patient[] = [
 ];
 
 export const INITIAL_VISITS: Visit[] = [];
+
+/*
+  Services:
+  - Some services target a specific doctor via doctorId
+  - Some target a specialty via specialty
+  - Some are global (no doctorId / specialty)
+*/
+export const INITIAL_SERVICES: Service[] = [
+  { id: 's-1', name: 'استشارة عامة', specialty: undefined, doctorId: undefined, price: 0, active: true }, // generic free service or placeholder
+  { id: 's-2', name: 'فحص قلب شامل', specialty: 'Cardiology', price: 300, active: true },
+  { id: 's-3', name: 'تصوير أشعة', specialty: 'Orthopedics', price: 200, active: true },
+  { id: 's-4', name: 'لقاح أطفال', specialty: 'Pediatrics', price: 150, active: true },
+  { id: 's-5', name: 'قسطرة تشخيصية', doctorId: 'd1', specialty: 'Cardiology', price: 2000, active: true }, // specific to d1
+  { id: 's-6', name: 'تنظير', specialty: 'Surgery', price: 1200, active: true },
+  { id: 's-7', name: 'كشف أسنان شامل', specialty: 'Dentistry', price: 250, active: true },
+  { id: 's-8', name: 'اختبار عيون', specialty: 'Ophthalmology', price: 180, active: true },
+];

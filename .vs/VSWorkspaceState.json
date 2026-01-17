@@ -1,9 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\src\\context",
-    "\\src\\hooks",
-    "\\src\\services"
+    "\\components"
   ],
+  "SelectedNode": "\\store",
   "PreviewInSolutionExplorer": false
 }

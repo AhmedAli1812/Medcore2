@@ -1,11 +1,9 @@
 import React, { useMemo, useState } from 'react';
-import { Doctor, Visit, InsuranceCompany } from '../types';
-import { fetchDoctorReports, fetchSpecialtyReports, fetchCompanyReports, Period, DoctorReport, SpecialtyReport, CompanyReport } from '../src/services/reports';
-import { Activity, RefreshCw } from 'lucide-react';
+import { Doctor, Visit, InsuranceCompany, Period, DoctorReport, SpecialtyReport, CompanyReport } from '../types';
+import { Activity, Download } from 'lucide-react';
 
 /**
- * ReportsView: Accepts client-side data so admin can view reports even when backend is not available.
- * Also supports fetching server-generated reports using the reports service.
+ * ReportsView: Displays client-side reports aggregated from provided data.
  */
 
 type Scope = 'doctors' | 'specialties' | 'companies';
@@ -38,9 +36,6 @@ const filterByPeriod = (visits: Visit[], period: Period) => {
 const ReportsView: React.FC<ReportsViewProps> = ({ doctors, visits, companies }) => {
   const [scope, setScope] = useState<Scope>('doctors');
   const [period, setPeriod] = useState<Period>('daily');
-  const [loading, setLoading] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
-  const [serverData, setServerData] = useState<DoctorReport[] | SpecialtyReport[] | CompanyReport[] | null>(null);
 
   const localFiltered = useMemo(() => filterByPeriod(visits, period), [visits, period]);
 
@@ -81,124 +76,83 @@ const ReportsView: React.FC<ReportsViewProps> = ({ doctors, visits, companies })
   }, [localFiltered, doctors]);
 
   const localCompanyAggregates = useMemo(() => {
-    const map = new Map<string, { companyName: string; visits: number; totalPaid: number; totalDue: number }>();
+    const map = new Map<string, { companyId: string; companyName: string; visits: number; revenue: number; totalPaid: number; totalDue: number }>();
     localFiltered.forEach(v => {
       const cid = v.insuranceCompanyId || 'direct';
       const comp = companies.find(c => c.id === cid);
       const name = comp?.name ?? (cid === 'direct' ? 'Cash / Direct' : cid);
-      const cur = map.get(cid) ?? { companyName: name, visits: 0, totalPaid: 0, totalDue: 0 };
+      const cur = map.get(cid) ?? { companyId: cid, companyName: name, visits: 0, revenue: 0, totalPaid: 0, totalDue: 0 };
       cur.visits += 1;
-      cur.totalPaid += Number(v.insurancePay || 0);
-      cur.totalDue += Number(v.totalAmount || 0) - Number(v.insurancePay || 0);
+      cur.revenue += Number(v.totalAmount || 0);
+      if (v.paymentType === 'Insurance') {
+        cur.totalPaid += Number(v.insurancePay || 0);
+        cur.totalDue += Number(v.patientCash || 0);
+      } else {
+        // For cash payments, the full amount is "due" from patient
+        cur.totalDue += Number(v.totalAmount || 0);
+      }
       map.set(cid, cur);
     });
-    return Array.from(map.entries()).map(([companyId, d]) => ({
-      companyId,
-      companyName: d.companyName,
-      visits: d.visits,
-      totalPaid: d.totalPaid,
-      totalDue: d.totalDue
-    })) as CompanyReport[];
+    return Array.from(map.values()) as CompanyReport[];
   }, [localFiltered, companies]);
 
-  const handleFetchServer = async () => {
-    setLoading(true);
-    setServerError(null);
-    try {
-      if (scope === 'doctors') {
-        const res = await fetchDoctorReports(period);
-        setServerData(res);
-      } else if (scope === 'specialties') {
-        const res = await fetchSpecialtyReports(period);
-        setServerData(res);
-      } else {
-        const res = await fetchCompanyReports(period);
-        setServerData(res);
-      }
-    } catch (e: any) {
-      setServerError(e?.message ?? 'Server error');
-      setServerData(null);
-    } finally {
-      setLoading(false);
+  const exportToCSV = () => {
+    let data: any[] = [];
+    let filename = '';
+
+    if (scope === 'doctors') {
+      data = localDoctorAggregates.map(row => ({
+        'Doctor': row.doctorName,
+        'Visits': row.visits,
+        'Revenue': row.revenue,
+        'Average per Visit': row.visits > 0 ? (row.revenue / row.visits).toFixed(2) : '0'
+      }));
+      filename = 'doctor_reports';
+    } else if (scope === 'specialties') {
+      data = localSpecialtyAggregates.map(row => ({
+        'Specialty': row.specialty,
+        'Visits': row.visits,
+        'Revenue': row.revenue,
+        'Average per Visit': row.visits > 0 ? (row.revenue / row.visits).toFixed(2) : '0'
+      }));
+      filename = 'specialty_reports';
+    } else if (scope === 'companies') {
+      data = localCompanyAggregates.map(row => ({
+        'Company': row.companyName,
+        'Visits': row.visits,
+        'Revenue': row.revenue,
+        'Total Paid': row.totalPaid,
+        'Total Due': row.totalDue
+      }));
+      filename = 'company_reports';
     }
+
+    if (data.length === 0) return;
+
+    const headers = Object.keys(data[0]);
+    const csvData = data.map(row => headers.map(header => `"${row[header]}"`));
+    const csvContent = [headers, ...csvData].map(row => row.join(',')).join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `${filename}_${period}_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const renderTable = () => {
-    if (serverData) {
-      // Render server data if available
-      if (scope === 'doctors') {
-        const rows = serverData as DoctorReport[];
-        return (
-          <table className="w-full text-left">
-            <thead>
-              <tr className="text-xs text-slate-400 uppercase">
-                <th>Doctor</th><th>Visits</th><th>Revenue</th><th>Avg/Visit</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map(r => (
-                <tr key={r.doctorId} className="border-t">
-                  <td className="py-3">{r.doctorName}</td>
-                  <td>{r.visits}</td>
-                  <td>{r.revenue.toLocaleString()}</td>
-                  <td>{r.avgPerVisit.toFixed(2)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        );
-      }
-      if (scope === 'specialties') {
-        const rows = serverData as SpecialtyReport[];
-        return (
-          <table className="w-full text-left">
-            <thead>
-              <tr className="text-xs text-slate-400 uppercase">
-                <th>Specialty</th><th>Visits</th><th>Revenue</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map(r => (
-                <tr key={r.specialty} className="border-t">
-                  <td className="py-3">{r.specialty}</td>
-                  <td>{r.visits}</td>
-                  <td>{r.revenue.toLocaleString()}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        );
-      }
-      const rows = serverData as CompanyReport[];
-      return (
-        <table className="w-full text-left">
-          <thead>
-            <tr className="text-xs text-slate-400 uppercase">
-              <th>Company</th><th>Visits</th><th>Total Paid</th><th>Total Due</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map(r => (
-              <tr key={r.companyId} className="border-t">
-                <td className="py-3">{r.companyName}</td>
-                <td>{r.visits}</td>
-                <td>{r.totalPaid.toLocaleString()}</td>
-                <td>{r.totalDue.toLocaleString()}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      );
-    }
-
-    // Fallback to local aggregates
+    // Local aggregates
     if (scope === 'doctors') {
       const rows = localDoctorAggregates;
       return (
         <table className="w-full text-left">
           <thead>
             <tr className="text-xs text-slate-400 uppercase">
-              <th>Doctor</th><th>Visits</th><th>Revenue</th><th>Avg/Visit</th>
+              <th>الطبيب</th><th>عدد الزيارات</th><th>الإيرادات</th><th>متوسط/زيارة</th>
             </tr>
           </thead>
           <tbody>
@@ -210,7 +164,7 @@ const ReportsView: React.FC<ReportsViewProps> = ({ doctors, visits, companies })
                 <td>{r.avgPerVisit.toFixed(2)}</td>
               </tr>
             ))}
-            {rows.length === 0 && <tr><td colSpan={4} className="py-4 text-slate-400">No visits for selected period</td></tr>}
+            {rows.length === 0 && <tr><td colSpan={4} className="py-4 text-slate-400">لا توجد زيارات في الفترة المحددة</td></tr>}
           </tbody>
         </table>
       );
@@ -221,7 +175,7 @@ const ReportsView: React.FC<ReportsViewProps> = ({ doctors, visits, companies })
         <table className="w-full text-left">
           <thead>
             <tr className="text-xs text-slate-400 uppercase">
-              <th>Specialty</th><th>Visits</th><th>Revenue</th>
+              <th>التخصص</th><th>عدد الزيارات</th><th>الإيرادات</th>
             </tr>
           </thead>
           <tbody>
@@ -232,7 +186,7 @@ const ReportsView: React.FC<ReportsViewProps> = ({ doctors, visits, companies })
                 <td>{r.revenue.toLocaleString()}</td>
               </tr>
             ))}
-            {rows.length === 0 && <tr><td colSpan={3} className="py-4 text-slate-400">No visits for selected period</td></tr>}
+            {rows.length === 0 && <tr><td colSpan={3} className="py-4 text-slate-400">لا توجد زيارات في الفترة المحددة</td></tr>}
           </tbody>
         </table>
       );
@@ -242,7 +196,7 @@ const ReportsView: React.FC<ReportsViewProps> = ({ doctors, visits, companies })
       <table className="w-full text-left">
         <thead>
           <tr className="text-xs text-slate-400 uppercase">
-            <th>Company</th><th>Visits</th><th>Total Paid</th><th>Total Due</th>
+            <th>الشركة</th><th>عدد الزيارات</th><th>المبلغ المدفوع</th><th>المبلغ المستحق</th>
           </tr>
         </thead>
         <tbody>
@@ -254,7 +208,7 @@ const ReportsView: React.FC<ReportsViewProps> = ({ doctors, visits, companies })
               <td>{r.totalDue.toLocaleString()}</td>
             </tr>
           ))}
-          {rows.length === 0 && <tr><td colSpan={4} className="py-4 text-slate-400">No visits for selected period</td></tr>}
+          {rows.length === 0 && <tr><td colSpan={4} className="py-4 text-slate-400">لا توجد زيارات في الفترة المحددة</td></tr>}
         </tbody>
       </table>
     );
@@ -265,32 +219,34 @@ const ReportsView: React.FC<ReportsViewProps> = ({ doctors, visits, companies })
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
           <Activity className="w-5 h-5 text-indigo-600" />
-          <h3 className="text-xl font-black text-slate-800">????????</h3>
+          <h3 className="text-xl font-black text-slate-800">التقارير والإحصائيات</h3>
         </div>
         <div className="flex gap-2">
           <select className="bg-slate-50 border border-slate-100 rounded-2xl px-4 py-3 font-black text-sm" value={scope} onChange={e => setScope(e.target.value as Scope)}>
-            <option value="doctors">??????</option>
-            <option value="specialties">????????</option>
-            <option value="companies">????? ???????</option>
+            <option value="doctors">الأطباء</option>
+            <option value="specialties">التخصصات</option>
+            <option value="companies">شركات التأمين</option>
           </select>
           <select className="bg-slate-50 border border-slate-100 rounded-2xl px-4 py-3 font-black text-sm" value={period} onChange={e => setPeriod(e.target.value as Period)}>
-            <option value="daily">??????</option>
-            <option value="weekly">????????</option>
-            <option value="monthly">??????</option>
+            <option value="daily">يومي</option>
+            <option value="weekly">أسبوعي</option>
+            <option value="monthly">شهري</option>
           </select>
-          <button onClick={handleFetchServer} className="bg-indigo-600 text-white px-4 py-3 rounded-2xl font-black text-sm flex items-center gap-2">
-            <RefreshCw className="w-4 h-4" /> Fetch from API
+          <button 
+            onClick={exportToCSV}
+            className="bg-indigo-600 text-white px-6 py-3 rounded-2xl font-black text-sm shadow-lg flex items-center gap-2 hover:bg-black transition-all"
+          >
+            <Download className="w-4 h-4" /> تصدير CSV
           </button>
         </div>
       </div>
 
-      {serverError && <div className="mb-4 text-sm text-red-500">Server: {serverError}</div>}
       <div className="overflow-x-auto">
-        {loading ? <div className="py-10 text-center text-slate-400">Loading...</div> : renderTable()}
+        {renderTable()}
       </div>
 
       <div className="mt-6 text-xs text-slate-400">
-        Showing client-side aggregates when server reports are not available. Use the backend endpoints listed in configuration to enable server-side reports.
+        التقارير مجمعة من بيانات الزيارات المتاحة في النظام.
       </div>
     </div>
   );

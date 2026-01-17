@@ -1,4 +1,3 @@
-
 export enum UserRole {
   RECEPTION = 'Reception',
   DOCTOR = 'Doctor',
@@ -71,6 +70,16 @@ export interface Doctor {
   roomNumber: string;
 }
 
+export interface Service {
+  id: string;
+  name: string;
+  // Either target a specific doctor or a specialty or leave both undefined to mean global service
+  doctorId?: string;
+  specialty?: string;
+  price: number;
+  active: boolean;
+}
+
 export interface Patient {
   id: string;
   name: string;
@@ -108,3 +117,26 @@ export interface Visit {
   // Fix: Added insuranceCompanyId to Visit interface to resolve property access errors in InsuranceManagerView
   insuranceCompanyId?: string;
 }
+
+export type Period = 'daily' | 'weekly' | 'monthly';
+
+export type DoctorReport = {
+  doctorName: string;
+  visits: number;
+  revenue: number;
+};
+
+export type SpecialtyReport = {
+  specialty: string;
+  visits: number;
+  revenue: number;
+};
+
+export type CompanyReport = {
+  companyId: string;
+  companyName: string;
+  visits: number;
+  revenue: number;
+  totalPaid: number;
+  totalDue: number;
+};

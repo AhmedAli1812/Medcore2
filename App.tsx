@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { UserRole, Patient, Doctor, InsuranceCompany, Visit, Clinic, Room, Schedule } from './types';
-import { INITIAL_DOCTORS, INITIAL_COMPANIES, INITIAL_PATIENTS, INITIAL_VISITS, INITIAL_CLINICS, INITIAL_ROOMS, INITIAL_SCHEDULES } from './store/mockData';
+import { UserRole, Patient, Doctor, InsuranceCompany, Visit, Clinic, Room, Schedule, Service } from './types';
+import { INITIAL_DOCTORS, INITIAL_COMPANIES, INITIAL_PATIENTS, INITIAL_VISITS, INITIAL_CLINICS, INITIAL_ROOMS, INITIAL_SCHEDULES, INITIAL_SERVICES } from './store/mockData';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import LoginPage from './components/LoginPage';
@@ -51,6 +51,11 @@ const App: React.FC = () => {
     const saved = localStorage.getItem('medcore_schedules');
     return saved ? JSON.parse(saved) : INITIAL_SCHEDULES;
   });
+  
+  const [services, setServices] = useState<Service[]>(() => {
+    const saved = localStorage.getItem('medcore_services');
+    return saved ? JSON.parse(saved) : INITIAL_SERVICES;
+  });
 
   useEffect(() => { localStorage.setItem('medcore_patients', JSON.stringify(patients)); }, [patients]);
   useEffect(() => { localStorage.setItem('medcore_doctors', JSON.stringify(doctors)); }, [doctors]);
@@ -59,6 +64,7 @@ const App: React.FC = () => {
   useEffect(() => { localStorage.setItem('medcore_clinics', JSON.stringify(clinics)); }, [clinics]);
   useEffect(() => { localStorage.setItem('medcore_rooms', JSON.stringify(rooms)); }, [rooms]);
   useEffect(() => { localStorage.setItem('medcore_schedules', JSON.stringify(schedules)); }, [schedules]);
+  useEffect(() => { localStorage.setItem('medcore_services', JSON.stringify(services)); }, [services]);
 
   const addPatient = (patient: Patient) => setPatients(prev => [patient, ...prev]);
   const addVisit = (visit: Visit) => setVisits(prev => [visit, ...prev]);
@@ -71,6 +77,11 @@ const App: React.FC = () => {
   const removeDoctor = (id: string) => setDoctors(prev => prev.filter(d => d.id !== id));
   const addCompany = (comp: InsuranceCompany) => setCompanies(prev => [...prev, comp]);
   const removeCompany = (id: string) => setCompanies(prev => prev.filter(c => c.id !== id));
+  const addService = (service: Service) => setServices(prev => [...prev, service]);
+  const removeService = (id: string) => setServices(prev => prev.filter(s => s.id !== id));
+  const updateService = (id: string, updates: Partial<Service>) => {
+    setServices(prev => prev.map(s => s.id === id ? { ...s, ...updates } : s));
+  };
   const updateClinic = (id: string, updates: Partial<Clinic>) => {
     setClinics(prev => prev.map(c => c.id === id ? { ...c, ...updates } : c));
   };
@@ -118,6 +129,7 @@ const App: React.FC = () => {
           visits={visits}
           rooms={rooms}
           schedules={schedules}
+          services={services}
           searchTerm={searchTerm}
           onAddPatient={addPatient}
           onAddVisit={addVisit}
@@ -151,11 +163,15 @@ const App: React.FC = () => {
           visits={visits}
           rooms={rooms}
           schedules={schedules}
+          services={services}
           searchTerm={searchTerm}
           onAddDoctor={addDoctor}
           onRemoveDoctor={removeDoctor}
           onAddCompany={addCompany}
           onRemoveCompany={removeCompany}
+          onAddService={addService}
+          onRemoveService={removeService}
+          onUpdateService={updateService}
           onUpdateVisit={updateVisit}
           onUpdateSchedule={updateSchedule}
           onUpdateRoom={updateRoom}

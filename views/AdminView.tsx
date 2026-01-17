@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { Patient, Doctor, InsuranceCompany, Visit, Room, Schedule, VisitStatus } from '../types';
+import { Patient, Doctor, InsuranceCompany, Visit, Room, Schedule, VisitStatus, Service } from '../types';
 import { 
   Stethoscope, Clock, DoorOpen, X, Trash2, Monitor, Check, 
-  Save, Users, Activity, Settings, Plus, MapPin, DollarSign, ShieldAlert
+  Save, Users, Activity, Settings, Plus, MapPin, DollarSign, ShieldAlert, Calendar, Download
 } from 'lucide-react';
 import ReportsView from './ReportsView';
 
@@ -13,11 +13,15 @@ interface AdminViewProps {
   visits: Visit[];
   rooms: Room[];
   schedules: Schedule[];
+  services: Service[];
   searchTerm: string;
   onAddDoctor: (d: Doctor) => void;
   onRemoveDoctor: (id: string) => void;
   onAddCompany: (c: InsuranceCompany) => void;
   onRemoveCompany: (id: string) => void;
+  onAddService: (s: Service) => void;
+  onRemoveService: (id: string) => void;
+  onUpdateService: (id: string, updates: Partial<Service>) => void;
   onUpdateVisit: (id: string, updates: Partial<Visit>) => void;
   onUpdateSchedule: (newSchedules: Schedule[]) => void;
   onUpdateRoom: (id: string, updates: Partial<Room>) => void;
@@ -30,11 +34,13 @@ const SPECIALTIES = [
 ];
 
 const AdminView: React.FC<AdminViewProps> = ({ 
-  patients, doctors, companies, visits, rooms, schedules, searchTerm, 
-  onAddDoctor, onRemoveDoctor, onAddCompany, onRemoveCompany, onUpdateVisit, onUpdateSchedule, onUpdateRoom 
+  patients, doctors, companies, visits, rooms, schedules, services, searchTerm, 
+  onAddDoctor, onRemoveDoctor, onAddCompany, onRemoveCompany, onAddService, onRemoveService, onUpdateService, onUpdateVisit, onUpdateSchedule, onUpdateRoom 
 }) => {
-  const [activeTab, setActiveTab] = useState<'matrix' | 'doctors' | 'reports'>('matrix');
+  const [activeTab, setActiveTab] = useState<'matrix' | 'doctors' | 'services' | 'reports' | 'appointments'>('matrix');
   const [showAddDoc, setShowAddDoc] = useState(false);
+  const [showAddService, setShowAddService] = useState(false);
+  const [editingService, setEditingService] = useState<Service | null>(null);
   const [editingRoomId, setEditingRoomId] = useState<string | null>(null);
   
   const currentDay = new Date().toLocaleDateString('en-US', { weekday: 'long' });
@@ -84,6 +90,11 @@ const AdminView: React.FC<AdminViewProps> = ({
       startTime: schedule?.startTime || '09:00',
       endTime: schedule?.endTime || '21:00'
     });
+  };
+
+  const handleEditService = (service: Service) => {
+    setEditingService(service);
+    setShowAddService(true);
   };
 
   const handleSaveRoomEdit = () => {
@@ -141,6 +152,42 @@ const AdminView: React.FC<AdminViewProps> = ({
     setNewDoctorForm({ name: '', specialty: SPECIALTIES[0], consultationFee: 300, roomNumber: rooms[0]?.id || '' });
   };
 
+  const exportAppointmentsToCSV = () => {
+    const headers = ['Patient Name', 'Patient Phone', 'Doctor Name', 'Doctor Specialty', 'Service', 'Date', 'Time', 'Status', 'Amount', 'Payment Type'];
+    const csvData = visits.map(visit => {
+      const patient = patients.find(p => p.id === visit.patientId);
+      const doctor = doctors.find(d => d.id === visit.doctorId);
+      const service = services.find(s => s.id === visit.serviceId);
+      
+      return [
+        patient?.name || '',
+        patient?.phone || '',
+        doctor?.name || '',
+        doctor?.specialty || '',
+        service?.name || 'General Consultation',
+        visit.date,
+        visit.startTime,
+        visit.status,
+        visit.totalAmount,
+        visit.paymentType
+      ];
+    });
+
+    const csvContent = [headers, ...csvData].map(row => 
+      row.map(field => `"${field}"`).join(',')
+    ).join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `appointments_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="space-y-8 pb-12 arabic-font" dir="rtl">
       {/* Admin Nav */}
@@ -158,10 +205,22 @@ const AdminView: React.FC<AdminViewProps> = ({
           <Stethoscope className="w-4 h-4 ml-2" /> إدارة الأطباء
         </button>
         <button 
+          onClick={() => setActiveTab('services')}
+          className={`flex items-center px-6 py-4 rounded-2xl text-[10px] font-black transition-all ${activeTab === 'services' ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-100' : 'text-slate-400 hover:bg-slate-50'}`}
+        >
+          <Settings className="w-4 h-4 ml-2" /> إدارة الخدمات
+        </button>
+        <button 
           onClick={() => setActiveTab('reports')}
           className={`flex items-center px-6 py-4 rounded-2xl text-[10px] font-black transition-all ${activeTab === 'reports' ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-100' : 'text-slate-400 hover:bg-slate-50'}`}
         >
           <Activity className="w-4 h-4 ml-2" /> التقارير
+        </button>
+        <button 
+          onClick={() => setActiveTab('appointments')}
+          className={`flex items-center px-6 py-4 rounded-2xl text-[10px] font-black transition-all ${activeTab === 'appointments' ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-100' : 'text-slate-400 hover:bg-slate-50'}`}
+        >
+          <Calendar className="w-4 h-4 ml-2" /> المواعيد
         </button>
       </div>
 
@@ -324,8 +383,220 @@ const AdminView: React.FC<AdminViewProps> = ({
         </div>
       )}
 
+      {activeTab === 'services' && (
+        <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-sm max-w-4xl mx-auto overflow-hidden animate-in fade-in">
+          <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+             <h3 className="text-xl font-black text-slate-800">إدارة الخدمات</h3>
+             <button onClick={() => setShowAddService(true)} className="bg-indigo-600 text-white px-8 py-4 rounded-2xl font-black text-xs shadow-lg flex items-center gap-2 hover:bg-black transition-all">
+               <Plus className="w-4 h-4" /> إضافة خدمة
+             </button>
+          </div>
+          <div className="divide-y divide-slate-100">
+            {services.map(service => (
+              <div key={service.id} className="p-8 flex items-center justify-between hover:bg-slate-50 transition-colors">
+                <div className="flex-1">
+                  <h4 className="text-lg font-bold text-slate-800">{service.name}</h4>
+                  <p className="text-sm text-slate-500">
+                    {service.doctorId ? `للطبيب: ${doctors.find(d => d.id === service.doctorId)?.name}` : 
+                     service.specialty ? `لتخصص: ${service.specialty}` : 'عامة'}
+                  </p>
+                  <p className="text-sm font-semibold text-indigo-600">{service.price} ج.م</p>
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={() => handleEditService(service)} className="p-2 hover:bg-indigo-50 text-indigo-400 rounded-xl">
+                    <Settings className="w-5 h-5" />
+                  </button>
+                  <button onClick={() => onRemoveService(service.id)} className="p-2 hover:bg-red-50 text-red-400 rounded-xl">
+                    <Trash2 className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Add/Edit Service Modal */}
+      {showAddService && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[100] flex items-center justify-center p-4">
+          <div className="bg-white rounded-[3rem] w-full max-w-xl shadow-2xl p-10">
+            <div className="flex justify-between items-center mb-10">
+              <h2 className="text-2xl font-black text-slate-800">{editingService ? 'تعديل خدمة' : 'إضافة خدمة جديدة'}</h2>
+              <button onClick={() => { setShowAddService(false); setEditingService(null); }} className="p-2 hover:bg-slate-100 rounded-2xl">
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              const formData = new FormData(e.target as HTMLFormElement);
+              const serviceData = {
+                id: editingService?.id || `s-${Date.now()}`,
+                name: formData.get('name') as string,
+                price: Number(formData.get('price')),
+                doctorId: formData.get('doctorId') as string || undefined,
+                specialty: formData.get('specialty') as string || undefined,
+                active: true
+              };
+              if (editingService) {
+                onUpdateService(editingService.id, serviceData);
+              } else {
+                onAddService(serviceData);
+              }
+              setShowAddService(false);
+              setEditingService(null);
+            }}>
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-2">اسم الخدمة</label>
+                  <input 
+                    name="name" 
+                    type="text" 
+                    defaultValue={editingService?.name || ''} 
+                    required 
+                    className="w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent" 
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-2">السعر (ج.م)</label>
+                  <input 
+                    name="price" 
+                    type="number" 
+                    defaultValue={editingService?.price || ''} 
+                    required 
+                    className="w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent" 
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-2">التخصص (اختياري)</label>
+                  <select 
+                    name="specialty" 
+                    defaultValue={editingService?.specialty || ''} 
+                    className="w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  >
+                    <option value="">عام</option>
+                    {SPECIALTIES.map(spec => <option key={spec} value={spec}>{spec}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-2">الطبيب (اختياري)</label>
+                  <select 
+                    name="doctorId" 
+                    defaultValue={editingService?.doctorId || ''} 
+                    className="w-full px-4 py-3 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  >
+                    <option value="">عام</option>
+                    {doctors.map(doc => <option key={doc.id} value={doc.id}>{doc.name}</option>)}
+                  </select>
+                </div>
+              </div>
+              <div className="flex gap-4 mt-10">
+                <button type="submit" className="flex-1 bg-indigo-600 text-white py-4 rounded-2xl font-black hover:bg-black transition-all">
+                  {editingService ? 'تحديث' : 'إضافة'}
+                </button>
+                <button type="button" onClick={() => { setShowAddService(false); setEditingService(null); }} className="flex-1 bg-slate-100 text-slate-600 py-4 rounded-2xl font-black hover:bg-slate-200 transition-all">
+                  إلغاء
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {activeTab === 'reports' && (
-        <ReportsView visits={visits} doctors={doctors} patients={patients} />
+        <ReportsView visits={visits} doctors={doctors} companies={companies} />
+      )}
+
+      {activeTab === 'appointments' && (
+        <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-sm overflow-hidden">
+          <div className="p-8 border-b border-slate-100 flex justify-between items-center">
+            <h3 className="text-xl font-black text-slate-800">جميع سجلات المواعيد</h3>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 text-sm text-slate-500">
+                <Calendar className="w-4 h-4" />
+                {visits.length} موعد مسجل
+              </div>
+              <button 
+                onClick={() => exportAppointmentsToCSV()}
+                className="bg-indigo-600 text-white px-6 py-3 rounded-2xl font-black text-xs shadow-lg flex items-center gap-2 hover:bg-black transition-all"
+              >
+                <Download className="w-4 h-4" /> تصدير CSV
+              </button>
+            </div>
+          </div>
+          <div className="max-h-[600px] overflow-y-auto">
+            <table className="w-full">
+              <thead className="bg-slate-50 sticky top-0">
+                <tr className="text-xs text-slate-400 uppercase font-black">
+                  <th className="p-4 text-right">المريض</th>
+                  <th className="p-4 text-right">الطبيب</th>
+                  <th className="p-4 text-right">الخدمة</th>
+                  <th className="p-4 text-right">التاريخ</th>
+                  <th className="p-4 text-right">الوقت</th>
+                  <th className="p-4 text-right">الحالة</th>
+                  <th className="p-4 text-right">المبلغ</th>
+                  <th className="p-4 text-right">نوع الدفع</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {visits.map(visit => {
+                  const patient = patients.find(p => p.id === visit.patientId);
+                  const doctor = doctors.find(d => d.id === visit.doctorId);
+                  const service = services.find(s => s.id === visit.serviceId);
+                  
+                  return (
+                    <tr key={visit.id} className="hover:bg-slate-50 transition-colors">
+                      <td className="p-4">
+                        <div>
+                          <div className="font-bold text-slate-800">{patient?.name}</div>
+                          <div className="text-xs text-slate-500">{patient?.phone}</div>
+                        </div>
+                      </td>
+                      <td className="p-4">
+                        <div>
+                          <div className="font-bold text-indigo-600">{doctor?.name}</div>
+                          <div className="text-xs text-slate-500">{doctor?.specialty}</div>
+                        </div>
+                      </td>
+                      <td className="p-4">
+                        <div className="font-bold text-slate-800">{service?.name || 'استشارة عامة'}</div>
+                      </td>
+                      <td className="p-4 font-bold text-slate-800">{visit.date}</td>
+                      <td className="p-4 font-bold text-slate-800">{visit.startTime}</td>
+                      <td className="p-4">
+                        <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                          visit.status === 'Completed' ? 'bg-emerald-100 text-emerald-700' :
+                          visit.status === 'Arrived' ? 'bg-blue-100 text-blue-700' :
+                          visit.status === 'In-Progress' ? 'bg-amber-100 text-amber-700' :
+                          visit.status === 'Scheduled' ? 'bg-slate-100 text-slate-700' :
+                          'bg-red-100 text-red-700'
+                        }`}>
+                          {visit.status === 'Completed' ? 'مكتمل' :
+                           visit.status === 'Arrived' ? 'وصل' :
+                           visit.status === 'In-Progress' ? 'قيد التنفيذ' :
+                           visit.status === 'Scheduled' ? 'مجدول' : 'ملغي'}
+                        </span>
+                      </td>
+                      <td className="p-4 font-bold text-emerald-600">{visit.totalAmount} ج.م</td>
+                      <td className="p-4">
+                        <span className={`px-2 py-1 rounded-lg text-xs font-bold ${
+                          visit.paymentType === 'Cash' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
+                        }`}>
+                          {visit.paymentType === 'Cash' ? 'نقدي' : 'تأمين'}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            {visits.length === 0 && (
+              <div className="p-12 text-center text-slate-400">
+                <Calendar className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                <p>لا توجد مواعيد مسجلة</p>
+              </div>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );
