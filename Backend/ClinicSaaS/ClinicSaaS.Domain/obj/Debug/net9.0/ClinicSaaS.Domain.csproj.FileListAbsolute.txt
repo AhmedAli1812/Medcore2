@@ -1,0 +1,11 @@
+D:\work\ClinicSaaS\ClinicSaaS.Domain\bin\Debug\net9.0\ClinicSaaS.Domain.deps.json
+D:\work\ClinicSaaS\ClinicSaaS.Domain\bin\Debug\net9.0\ClinicSaaS.Domain.dll
+D:\work\ClinicSaaS\ClinicSaaS.Domain\bin\Debug\net9.0\ClinicSaaS.Domain.pdb
+D:\work\ClinicSaaS\ClinicSaaS.Domain\obj\Debug\net9.0\ClinicSaaS.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\work\ClinicSaaS\ClinicSaaS.Domain\obj\Debug\net9.0\ClinicSaaS.Domain.AssemblyInfoInputs.cache
+D:\work\ClinicSaaS\ClinicSaaS.Domain\obj\Debug\net9.0\ClinicSaaS.Domain.AssemblyInfo.cs
+D:\work\ClinicSaaS\ClinicSaaS.Domain\obj\Debug\net9.0\ClinicSaaS.Domain.csproj.CoreCompileInputs.cache
+D:\work\ClinicSaaS\ClinicSaaS.Domain\obj\Debug\net9.0\ClinicSaaS.Domain.dll
+D:\work\ClinicSaaS\ClinicSaaS.Domain\obj\Debug\net9.0\refint\ClinicSaaS.Domain.dll
+D:\work\ClinicSaaS\ClinicSaaS.Domain\obj\Debug\net9.0\ClinicSaaS.Domain.pdb
+D:\work\ClinicSaaS\ClinicSaaS.Domain\obj\Debug\net9.0\ref\ClinicSaaS.Domain.dll
